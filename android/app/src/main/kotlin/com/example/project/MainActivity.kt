@@ -1,4 +1,4 @@
-package com.example.nature_dex
+package com.example.project
 
 import io.flutter.embedding.android.FlutterActivity
 
