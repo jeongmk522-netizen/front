@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // 입력값 가져오기
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-    
+
     // 빈칸 확인
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -28,16 +28,33 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
-    
+
     // 로딩 시작
     setState(() => _isLoading = true);
-    
+
     // 2초 대기 (나중에 서버 통신으로 바꿀 예정)
     await Future.delayed(const Duration(seconds: 2));
-    
+
     // 로딩 끝
     setState(() => _isLoading = false);
-    
+
+    // 홈 화면으로 이동
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+  }
+
+  // 구글 로그인 처리
+  void _handleGoogleLogin() async {
+    // 로딩 시작
+    setState(() => _isLoading = true);
+
+    // TODO: 구글 로그인 API 연동 (나중에 구현)
+    await Future.delayed(const Duration(seconds: 2));
+
+    // 로딩 끝
+    setState(() => _isLoading = false);
+
     // 홈 화면으로 이동
     if (mounted) {
       Navigator.pushReplacementNamed(context, '/home');
@@ -141,8 +158,55 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
               ),
               
+              const SizedBox(height: 24),
+
+              // 구분선
+              Row(
+                children: [
+                  Expanded(child: Divider(color: Colors.grey[400])),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      '또는',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ),
+                  Expanded(child: Divider(color: Colors.grey[400])),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              // 구글 로그인 버튼
+              OutlinedButton.icon(
+                onPressed: _isLoading ? null : _handleGoogleLogin,
+                icon: Image.network(
+                  'https://www.google.com/favicon.ico',
+                  height: 24,
+                  width: 24,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.login, color: Colors.red);
+                  },
+                ),
+                label: const Text(
+                  'Google로 로그인',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  side: BorderSide(color: Colors.grey[300]!),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+              ),
+
               const SizedBox(height: 16),
-              
+
               // 회원가입 버튼
               TextButton(
                 onPressed: () {
